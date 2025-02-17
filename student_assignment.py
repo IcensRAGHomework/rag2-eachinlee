@@ -30,12 +30,42 @@ def hw02_1(q1_pdf):
     for i, chunk in enumerate(chunks):
         print(f"Chunk {i+1}:\n{chunk.page_content}\n{'-'*50}")
     """
-    
+
     # 回傳最後一個 chunk 物件
     return chunks[-1]
 
 def hw02_2(q2_pdf):
     pass
+
+def hw02_2(q2_pdf):
+
+    # 使用 PyPDFLoader 加載 PDF
+    loader = PyPDFLoader(q2_pdf)
+
+    # 讀取 PDF 內容
+    documents = loader.load()
+
+    # 合併文件大段落
+    Full_Doc = "\n".join([doc.page_content for doc in documents])
+    # check full_text
+    """
+    # print(full_text)
+    """
+    #separators = [r"\s*第\s*[\u4e00-\u9fa5]+\s*章\s*", r"\s*第\s*\d+(-\d+)?\s*條\s*\n"],
+    DocSeparators=[r"第\s+.*\s+章\s+", r"第\s+.*\s+條\s+",]
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 5, 
+    chunk_overlap = 0, 
+    separators = DocSeparators, 
+    is_separator_regex = True)
+
+    Doc_text = text_splitter.split_text(Full_Doc)
+
+    for i in range(5):
+        print("-"*10)
+        print(Doc_text[i])
+
+    return len(Doc_text)
+
 
 # Self Test
 """
